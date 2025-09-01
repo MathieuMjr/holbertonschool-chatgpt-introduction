@@ -78,7 +78,7 @@ class Minesweeper:
 
                 if self.check_win():
                     self.print_board(reveal=True)
-                    print("Congratulations! You cleared all non-mine cells!")
+                    print("Congratulations! You've won the game.")
                     break
 
             except ValueError:
