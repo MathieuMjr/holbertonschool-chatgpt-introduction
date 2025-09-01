@@ -9,6 +9,7 @@ class Minesweeper:
     def __init__(self, width=10, height=10, mines=10):
         self.width = width
         self.height = height
+        # Génère des positions de mines uniques
         self.mines = set(random.sample(range(width * height), mines))
         self.field = [[' ' for _ in range(width)] for _ in range(height)]
         self.revealed = [[False for _ in range(width)] for _ in range(height)]
@@ -51,16 +52,35 @@ class Minesweeper:
                         self.reveal(nx, ny)
         return True
 
+    def check_win(self):
+        """Retourne True si toutes les cases sans mine ont été révélées"""
+        for y in range(self.height):
+            for x in range(self.width):
+                if (y * self.width + x) not in self.mines and not self.revealed[y][x]:
+                    return False
+        return True
+
     def play(self):
         while True:
             self.print_board()
             try:
                 x = int(input("Enter x coordinate: "))
                 y = int(input("Enter y coordinate: "))
+
+                if not (0 <= x < self.width and 0 <= y < self.height):
+                    print("Coordinates out of bounds!")
+                    continue
+
                 if not self.reveal(x, y):
                     self.print_board(reveal=True)
                     print("Game Over! You hit a mine.")
                     break
+
+                if self.check_win():
+                    self.print_board(reveal=True)
+                    print("Congratulations! You cleared all non-mine cells!")
+                    break
+
             except ValueError:
                 print("Invalid input. Please enter numbers only.")
 
